@@ -10,6 +10,9 @@ interface InventoryItem {
     comment?: string;
 }
 
+// ============================================
+// Sample Initial Data
+// ============================================
 let inventory: InventoryItem[] = [
     {
         id: 1,
@@ -32,12 +35,49 @@ let inventory: InventoryItem[] = [
         stockStatus: "Low Stock",
         popular: "No",
         comment: ""
+    },
+    {
+        id: 3,
+        name: "Wireless Mouse",
+        category: "Electronics",
+        quantity: 50,
+        price: 29.99,
+        supplier: "Logitech",
+        stockStatus: "In Stock",
+        popular: "Yes",
+        comment: "Customer favorite"
+    },
+    {
+        id: 4,
+        name: "Gaming Chair",
+        category: "Furniture",
+        quantity: 0,
+        price: 399.99,
+        supplier: "Secretlab",
+        stockStatus: "Out of Stock",
+        popular: "Yes",
+        comment: "High demand"
     }
 ];
 
+// ============================================
+// Global State Variables
+// ============================================
+let currentSearchTerm: string = '';
+let isShowingPopularOnly: boolean = false;
+
+// ============================================
+// DOM Element References
+// ============================================
 const messageArea = document.getElementById('messageArea') as HTMLDivElement;
 const inventoryList = document.getElementById('inventoryList') as HTMLDivElement;
+const searchInput = document.getElementById('searchInput') as HTMLInputElement;
 
+// ============================================
+// Helper Functions
+// ============================================
+
+// Display message to user
 function showMessage(message: string, isError: boolean = false): void {
     messageArea.innerHTML = `<div style="color: ${isError ? '#dc2626' : '#166534'}">${message}</div>`;
     setTimeout(() => {
@@ -47,32 +87,119 @@ function showMessage(message: string, isError: boolean = false): void {
     }, 3000);
 }
 
+// Escape HTML to prevent XSS attacks
+function escapeHtml(str: string): string {
+    if (!str) return '';
+    return str
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+}
+
+// Get color for stock status display
+function getStockColor(status: string): string {
+    switch(status) {
+        case 'In Stock': return '#16a34a';
+        case 'Low Stock': return '#eab308';
+        case 'Out of Stock': return '#dc2626';
+        default: return '#1e293b';
+    }
+}
+
+// Get filtered items based on search term and popular filter
+function getFilteredItems(): InventoryItem[] {
+    let filtered = [...inventory];
+    
+    if (isShowingPopularOnly) {
+        filtered = filtered.filter(item => item.popular === 'Yes');
+    }
+    
+    if (currentSearchTerm) {
+        filtered = filtered.filter(item => 
+            item.name.toLowerCase().includes(currentSearchTerm.toLowerCase())
+        );
+    }
+    
+    return filtered;
+}
+
+// Update the display based on current filters
+function updateDisplay(): void {
+    const filteredItems = getFilteredItems();
+    renderInventory(filteredItems);
+    
+    let statusMessage = '';
+    if (isShowingPopularOnly && currentSearchTerm) {
+        statusMessage = `Showing popular items matching "${currentSearchTerm}"`;
+    } else if (isShowingPopularOnly) {
+        statusMessage = 'Showing popular items only';
+    } else if (currentSearchTerm) {
+        statusMessage = `Showing items matching "${currentSearchTerm}"`;
+    } else {
+        statusMessage = `Showing all ${inventory.length} items`;
+    }
+    
+    if (filteredItems.length !== inventory.length) {
+        statusMessage += ` (${filteredItems.length} results)`;
+    }
+    
+    showMessage(statusMessage);
+}
+
+// ============================================
+// Render Functions
+// ============================================
+
+// Render inventory items as HTML table
 function renderInventory(items: InventoryItem[]): void {
     if (!items.length) {
-        inventoryList.innerHTML = '<p>No items to display.</p>';
+        let message = 'No items to display.';
+        if (isShowingPopularOnly) {
+            message = 'No popular items found.';
+        } else if (currentSearchTerm) {
+            message = `No items found matching "${currentSearchTerm}".`;
+        }
+        inventoryList.innerHTML = `<p>${message}</p>`;
         return;
     }
 
     const table = document.createElement('table');
     table.innerHTML = `
         <thead>
-            <tr><th>ID</th><th>Name</th><th>Category</th><th>Qty</th><th>Price</th><th>Supplier</th><th>Stock</th><th>Popular</th><th>Comment</th><th>Actions</th></tr>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Category</th>
+                <th>Qty</th>
+                <th>Price</th>
+                <th>Supplier</th>
+                <th>Stock</th>
+                <th>Popular</th>
+                <th>Comment</th>
+                <th>Actions</th>
+            </tr>
         </thead>
         <tbody>
             ${items.map(item => `
                 <tr>
                     <td>${item.id}</td>
-                    <td>${item.name}</td>
+                    <td>${escapeHtml(item.name)}</td>
                     <td>${item.category}</td>
                     <td>${item.quantity}</td>
                     <td>$${item.price.toFixed(2)}</td>
-                    <td>${item.supplier}</td>
-                    <td>${item.stockStatus}</td>
-                    <td>${item.popular}</td>
-                    <td>${item.comment || '-'}</td>
+                    <td>${escapeHtml(item.supplier)}</td>
+                    <td style="color: ${getStockColor(item.stockStatus)}; font-weight: 500;">
+                        ${item.stockStatus}
+                    </td>
+                    <td style="background: ${item.popular === 'Yes' ? '#fef3c7' : 'transparent'};">
+                        ${item.popular}
+                    </td>
+                    <td>${escapeHtml(item.comment || '-')}</td>
                     <td>
-                        <button class="edit-btn" data-name="${item.name}">Edit</button>
-                        <button class="delete-btn" data-name="${item.name}">Delete</button>
+                        <button class="edit-btn" data-name="${escapeHtml(item.name)}">Edit</button>
+                        <button class="delete-btn" data-name="${escapeHtml(item.name)}">Delete</button>
                     </td>
                 </tr>
             `).join('')}
@@ -81,7 +208,7 @@ function renderInventory(items: InventoryItem[]): void {
     inventoryList.innerHTML = '';
     inventoryList.appendChild(table);
 
-    // Attach delete event listeners
+    // Attach delete event listeners to delete buttons
     document.querySelectorAll('.delete-btn').forEach(btn => {
         btn.addEventListener('click', (e) => {
             const name = (e.target as HTMLButtonElement).getAttribute('data-name');
@@ -89,7 +216,7 @@ function renderInventory(items: InventoryItem[]): void {
         });
     });
 
-    // Attach edit event listeners
+    // Attach edit event listeners to edit buttons
     document.querySelectorAll('.edit-btn').forEach(btn => {
         btn.addEventListener('click', (e) => {
             const name = (e.target as HTMLButtonElement).getAttribute('data-name');
@@ -98,11 +225,47 @@ function renderInventory(items: InventoryItem[]): void {
     });
 }
 
+// ============================================
+// Core CRUD Operations
+// ============================================
+
+// Show all items (clear filters)
 function showAllItems(): void {
-    renderInventory(inventory);
-    showMessage(`Showing ${inventory.length} items`);
+    currentSearchTerm = '';
+    isShowingPopularOnly = false;
+    if (searchInput) searchInput.value = '';
+    updateDisplay();
 }
 
+// Show only popular items
+function showPopularItems(): void {
+    currentSearchTerm = '';
+    isShowingPopularOnly = true;
+    if (searchInput) searchInput.value = '';
+    updateDisplay();
+}
+
+// Search items by name
+function searchItems(): void {
+    const searchTerm = searchInput.value.trim();
+    if (!searchTerm) {
+        showMessage('Please enter a search term.', true);
+        return;
+    }
+    currentSearchTerm = searchTerm;
+    isShowingPopularOnly = false;
+    updateDisplay();
+}
+
+// Reset search and show all items
+function resetSearch(): void {
+    currentSearchTerm = '';
+    isShowingPopularOnly = false;
+    if (searchInput) searchInput.value = '';
+    updateDisplay();
+}
+
+// Add new item to inventory
 function addItem(): void {
     const idInput = document.getElementById('itemId') as HTMLInputElement;
     const nameInput = document.getElementById('itemName') as HTMLInputElement;
@@ -124,9 +287,9 @@ function addItem(): void {
     const popular = popularSelect.value as InventoryItem['popular'];
     const comment = commentInput.value.trim();
 
-    // Validation
+    // Validation checks
     if (!name || !category || !supplier) {
-        showMessage('Please fill all required fields.', true);
+        showMessage('Please fill all required fields (Name, Category, Supplier).', true);
         return;
     }
     if (isNaN(id) || id <= 0) {
@@ -135,6 +298,10 @@ function addItem(): void {
     }
     if (inventory.some(item => item.id === id)) {
         showMessage(`Item ID ${id} already exists. Please use a unique ID.`, true);
+        return;
+    }
+    if (inventory.some(item => item.name.toLowerCase() === name.toLowerCase())) {
+        showMessage(`Item name "${name}" already exists. Please use a unique name.`, true);
         return;
     }
     if (isNaN(quantity) || quantity < 0) {
@@ -159,13 +326,12 @@ function addItem(): void {
     };
 
     inventory.push(newItem);
-    showAllItems();
+    resetSearch();
     showMessage(`Item "${name}" added successfully.`);
-
-    // Clear form
     clearForm();
 }
 
+// Delete item by name with confirmation
 function deleteItemByName(name: string): void {
     const item = inventory.find(i => i.name === name);
     if (!item) {
@@ -176,11 +342,13 @@ function deleteItemByName(name: string): void {
     const confirmDelete = confirm(`Are you sure you want to delete item "${name}"?`);
     if (confirmDelete) {
         inventory = inventory.filter(i => i.name !== name);
-        showAllItems();
+        updateDisplay();
         showMessage(`Item "${name}" deleted successfully.`);
+        clearForm();
     }
 }
 
+// Fill form with item data for editing
 function fillFormForEdit(name: string): void {
     const item = inventory.find(i => i.name === name);
     if (!item) {
@@ -211,6 +379,7 @@ function fillFormForEdit(name: string): void {
     showMessage(`Editing item "${name}". Click Update Item to save changes.`);
 }
 
+// Update existing item by name
 function updateItem(): void {
     const nameInput = document.getElementById('itemName') as HTMLInputElement;
     const itemName = nameInput.value.trim();
@@ -244,9 +413,9 @@ function updateItem(): void {
     const newPopular = popularSelect.value as InventoryItem['popular'];
     const newComment = commentInput.value.trim();
 
-    // Validation
+    // Validation checks
     if (!newCategory || !newSupplier) {
-        showMessage('Please fill all required fields.', true);
+        showMessage('Please fill all required fields (Category, Supplier).', true);
         return;
     }
     if (isNaN(newId) || newId <= 0) {
@@ -278,11 +447,12 @@ function updateItem(): void {
         comment: newComment || undefined
     };
 
-    showAllItems();
+    resetSearch();
     showMessage(`Item "${itemName}" updated successfully.`);
     clearForm();
 }
 
+// Clear all form fields
 function clearForm(): void {
     const idInput = document.getElementById('itemId') as HTMLInputElement;
     const nameInput = document.getElementById('itemName') as HTMLInputElement;
@@ -305,8 +475,11 @@ function clearForm(): void {
     commentInput.value = '';
 }
 
+// ============================================
+// Initialization
+// ============================================
 function init(): void {
-    showAllItems();
+    updateDisplay();
     
     const addBtn = document.getElementById('addBtn');
     if (addBtn) addBtn.onclick = addItem;
@@ -316,6 +489,24 @@ function init(): void {
     
     const showAllBtn = document.getElementById('showAllBtn');
     if (showAllBtn) showAllBtn.onclick = () => showAllItems();
+    
+    const showPopularBtn = document.getElementById('showPopularBtn');
+    if (showPopularBtn) showPopularBtn.onclick = () => showPopularItems();
+    
+    const searchBtn = document.getElementById('searchBtn');
+    if (searchBtn) searchBtn.onclick = () => searchItems();
+    
+    const resetSearchBtn = document.getElementById('resetSearchBtn');
+    if (resetSearchBtn) resetSearchBtn.onclick = () => resetSearch();
+    
+    if (searchInput) {
+        searchInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                searchItems();
+            }
+        });
+    }
 }
 
+// Start the application when DOM is ready
 document.addEventListener('DOMContentLoaded', init);

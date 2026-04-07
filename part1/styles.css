@@ -16,6 +16,7 @@ body {
     margin: 0 auto;
 }
 
+/* Header Styles */
 header {
     background: linear-gradient(135deg, #1e3c72, #2a5298);
     color: white;
@@ -30,12 +31,19 @@ header h1 {
     margin-bottom: 8px;
 }
 
+/* Form Section Styles */
 .form-section {
     background: white;
     padding: 20px;
     border-radius: 20px;
     box-shadow: 0 4px 6px rgba(0,0,0,0.05);
     margin-bottom: 24px;
+}
+
+.form-section h2 {
+    margin-bottom: 16px;
+    font-size: 1.4rem;
+    color: #1e3c72;
 }
 
 .form-grid {
@@ -53,6 +61,12 @@ input, select, button {
     font-family: inherit;
 }
 
+input:focus, select:focus {
+    outline: none;
+    border-color: #2a5298;
+    box-shadow: 0 0 0 3px rgba(42, 82, 152, 0.1);
+}
+
 button {
     background: #2a5298;
     color: white;
@@ -64,6 +78,11 @@ button {
 
 button:hover {
     background: #1e3c72;
+    transform: translateY(-1px);
+}
+
+button:active {
+    transform: translateY(0);
 }
 
 .button-group {
@@ -72,6 +91,34 @@ button:hover {
     justify-content: flex-end;
 }
 
+/* Search Section Styles */
+.search-section {
+    background: white;
+    padding: 20px;
+    border-radius: 20px;
+    margin-bottom: 24px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+}
+
+.search-section h2 {
+    margin-bottom: 16px;
+    font-size: 1.4rem;
+    color: #1e3c72;
+}
+
+.search-group {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+.search-group input {
+    flex: 1;
+    min-width: 200px;
+}
+
+/* Action Section Styles */
 .action-section {
     display: flex;
     gap: 12px;
@@ -79,11 +126,23 @@ button:hover {
     flex-wrap: wrap;
 }
 
+.action-section button {
+    flex: 1;
+    min-width: 150px;
+}
+
+/* Display Section Styles */
 .display-section {
     background: white;
     padding: 20px;
     border-radius: 20px;
     box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+}
+
+.display-section h2 {
+    margin-bottom: 16px;
+    font-size: 1.4rem;
+    color: #1e3c72;
 }
 
 .message-area {
@@ -92,12 +151,14 @@ button:hover {
     border-radius: 12px;
     margin-bottom: 16px;
     color: #1e3c72;
+    font-size: 14px;
 }
 
 .inventory-list {
     overflow-x: auto;
 }
 
+/* Table Styles */
 table {
     width: 100%;
     border-collapse: collapse;
@@ -113,8 +174,15 @@ th, td {
 th {
     background: #f1f5f9;
     font-weight: 600;
+    position: sticky;
+    top: 0;
 }
 
+tr:hover {
+    background: #f8fafc;
+}
+
+/* Button Styles for Actions */
 .delete-btn, .edit-btn {
     padding: 6px 12px;
     margin: 0 4px;
@@ -137,9 +205,18 @@ th {
     background: #d97706;
 }
 
+/* Responsive Design */
 @media (max-width: 768px) {
     body {
         padding: 12px;
+    }
+    
+    header h1 {
+        font-size: 1.4rem;
+    }
+    
+    header p {
+        font-size: 0.9rem;
     }
     
     .form-grid {
@@ -153,5 +230,37 @@ th {
     
     button {
         padding: 10px;
+    }
+    
+    .button-group {
+        flex-direction: column;
+    }
+    
+    .action-section button {
+        min-width: auto;
+    }
+    
+    .delete-btn, .edit-btn {
+        padding: 4px 8px;
+        font-size: 11px;
+    }
+}
+
+@media (max-width: 480px) {
+    .search-group {
+        flex-direction: column;
+    }
+    
+    .search-group input, 
+    .search-group button {
+        width: 100%;
+    }
+    
+    table {
+        font-size: 11px;
+    }
+    
+    th, td {
+        padding: 6px;
     }
 }

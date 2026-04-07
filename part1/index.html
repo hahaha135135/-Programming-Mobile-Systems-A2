@@ -12,6 +12,7 @@
             <h1>Inventory Management System</h1>
         </header>
 
+        <!-- Add / Edit Form -->
         <section class="form-section">
             <h2>Add / Edit Item</h2>
             <form id="itemForm">
@@ -47,10 +48,23 @@
             </form>
         </section>
 
-        <section class="action-section">
-            <button id="showAllBtn">Show All Items</button>
+        <!-- Search Section -->
+        <section class="search-section">
+            <h2>Search Item</h2>
+            <div class="search-group">
+                <input type="text" id="searchInput" placeholder="Search by item name...">
+                <button id="searchBtn">Search</button>
+                <button id="resetSearchBtn">Reset</button>
+            </div>
         </section>
 
+        <!-- Action Buttons -->
+        <section class="action-section">
+            <button id="showAllBtn">Show All Items</button>
+            <button id="showPopularBtn">Show Popular Items</button>
+        </section>
+
+        <!-- Display Area -->
         <section class="display-section">
             <h2>Inventory List</h2>
             <div id="messageArea" class="message-area"></div>
