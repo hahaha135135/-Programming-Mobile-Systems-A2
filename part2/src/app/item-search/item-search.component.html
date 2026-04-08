@@ -1,0 +1,59 @@
+<div class="search-container">
+  <h1>Search Items</h1>
+
+  <div class="search-card">
+    <div class="search-group">
+      <input 
+        type="text" 
+        [(ngModel)]="searchTerm" 
+        placeholder="Search by item name..."
+        (keyup.enter)="performSearch()">
+      <button (click)="performSearch()">Search</button>
+      <button (click)="resetSearch()">Reset</button>
+      <button (click)="showPopular()" class="btn-popular">Show Popular Items</button>
+    </div>
+  </div>
+
+  <div *ngIf="message" class="message">{{message}}</div>
+
+  <div class="results-card">
+    <h2>Search Results ({{results.length}} items found)</h2>
+    
+    <div class="table-responsive">
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Category</th>
+            <th>Qty</th>
+            <th>Price</th>
+            <th>Supplier</th>
+            <th>Stock</th>
+            <th>Popular</th>
+            <th>Comment</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of results">
+            <td>{{item.id}}</td>
+            <td>{{item.name}}</td>
+            <td>{{item.category}}</td>
+            <td>{{item.quantity}}</td>
+            <td>{{item.price | currency}}</td>
+            <td>{{item.supplier}}</td>
+            <td [class.low-stock]="item.stockStatus === 'Low Stock'"
+                [class.out-stock]="item.stockStatus === 'Out of Stock'">
+              {{item.stockStatus}}
+            </td>
+            <td [class.popular-yes]="item.popular === 'Yes'">{{item.popular}}</td>
+            <td>{{item.comment || '-'}}</td>
+          </tr>
+          <tr *ngIf="results.length === 0">
+            <td colspan="9" class="empty-message">No items found.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

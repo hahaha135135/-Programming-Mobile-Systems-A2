@@ -1,0 +1,99 @@
+<div class="privacy-container">
+  <h1>Privacy & Security Analysis</h1>
+
+  <div class="content-card">
+    <h2>Data Security Considerations</h2>
+    <p>This inventory management system implements the following security measures to protect your data:</p>
+    
+    <div class="security-section">
+      <h3>1. Data Validation</h3>
+      <p>All user inputs are validated on the client side to prevent malformed data from entering the system. This includes:</p>
+      <ul>
+        <li>Unique ID enforcement to prevent duplicate entries</li>
+        <li>Numeric field validation (quantity and price must be non-negative numbers)</li>
+        <li>Required field checking before data submission</li>
+        <li>Name uniqueness validation to avoid duplicate items</li>
+      </ul>
+    </div>
+
+    <div class="security-section">
+      <h3>2. XSS Prevention</h3>
+      <p>Cross-Site Scripting (XSS) attacks are mitigated through:</p>
+      <ul>
+        <li>HTML escaping of user-supplied content before rendering</li>
+        <li>Using innerHTML safely with escaped content</li>
+        <li>Angular's built-in sanitization for template bindings</li>
+      </ul>
+    </div>
+
+    <div class="security-section">
+      <h3>3. Client-Side Data Storage</h3>
+      <p>Current implementation stores data only in memory during the browser session. This means:</p>
+      <ul>
+        <li>Data is cleared when the browser tab is closed</li>
+        <li>No persistent storage of sensitive information</li>
+        <li>Reduced risk of long-term data exposure</li>
+      </ul>
+    </div>
+
+    <div class="security-section">
+      <h3>4. User Confirmation</h3>
+      <p>Critical operations require explicit user confirmation:</p>
+      <ul>
+        <li>Delete operations prompt for confirmation before execution</li>
+        <li>Update operations require item name verification</li>
+        <li>Visual feedback for all user actions</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="content-card">
+    <h2>Privacy Requirements</h2>
+    
+    <div class="security-section">
+      <h3>1. Data Minimization</h3>
+      <p>The system only collects essential information for inventory management:</p>
+      <ul>
+        <li>Item ID and Name (required for identification)</li>
+        <li>Category, Quantity, Price (required for tracking)</li>
+        <li>Supplier Name (required for procurement)</li>
+        <li>Comment field is optional and can be left blank</li>
+      </ul>
+    </div>
+
+    <div class="security-section">
+      <h3>2. No Sensitive Data Collection</h3>
+      <p>This application does not collect:</p>
+      <ul>
+        <li>Personal user information (names, emails, addresses)</li>
+        <li>Payment or financial details</li>
+        <li>Location data</li>
+        <li>Authentication credentials</li>
+      </ul>
+    </div>
+
+    <div class="security-section">
+      <h3>3. Session-Only Storage</h3>
+      <p>All data exists only for the duration of the browser session. No data is:</p>
+      <ul>
+        <li>Transmitted to external servers</li>
+        <li>Stored in cookies or local storage</li>
+        <li>Shared with third parties</li>
+        <li>Persisted after browser closure</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="content-card">
+    <h2>Recommendations for Production Deployment</h2>
+    <p>For a production environment, the following additional security measures are recommended:</p>
+    <ul>
+      <li>Implement server-side validation and authentication</li>
+      <li>Use HTTPS for all data transmission</li>
+      <li>Store data in encrypted databases</li>
+      <li>Implement role-based access control (RBAC)</li>
+      <li>Regular security audits and penetration testing</li>
+      <li>Data backup and recovery procedures</li>
+    </ul>
+  </div>
+</div>

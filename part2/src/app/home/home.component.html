@@ -1,0 +1,60 @@
+<!--
+  Author: [Your Name]
+  Assignment: PROG2005 - Assessment 2 Part 2
+  Description: Home page component template
+-->
+
+<div class="home-container">
+  <div class="hero">
+    <h1>Inventory Management System</h1>
+    <p>Efficiently manage your product inventory with ease</p>
+  </div>
+
+  <div class="features">
+    <div class="feature-card">
+      <div class="feature-icon">📦</div>
+      <h3>Manage Inventory</h3>
+      <p>Add, edit, and delete items in your inventory database.</p>
+      <a routerLink="/inventory" class="btn">Go to Inventory</a>
+    </div>
+
+    <div class="feature-card">
+      <div class="feature-icon">🔍</div>
+      <h3>Search Items</h3>
+      <p>Quickly find items by name with our search feature.</p>
+      <a routerLink="/search" class="btn">Go to Search</a>
+    </div>
+
+    <div class="feature-card">
+      <div class="feature-icon">🔒</div>
+      <h3>Privacy & Security</h3>
+      <p>Learn about our security measures and data protection.</p>
+      <a routerLink="/privacy" class="btn">Learn More</a>
+    </div>
+
+    <div class="feature-card">
+      <div class="feature-icon">❓</div>
+      <h3>Help & Support</h3>
+      <p>FAQs and troubleshooting guidance.</p>
+      <a routerLink="/help" class="btn">Get Help</a>
+    </div>
+  </div>
+
+  <div class="stats-section">
+    <h2>System Overview</h2>
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-number">{{totalItems}}</div>
+        <div class="stat-label">Total Items</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number">{{popularItems}}</div>
+        <div class="stat-label">Popular Items</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number">{{lowStockItems}}</div>
+        <div class="stat-label">Low Stock Items</div>
+      </div>
+    </div>
+  </div>
+</div>
