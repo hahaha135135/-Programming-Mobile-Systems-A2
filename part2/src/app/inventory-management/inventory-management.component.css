@@ -1,57 +1,83 @@
 .inventory-container {
   max-width: 1400px;
   margin: 0 auto;
-  padding: 20px;
+  animation: fadeIn 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 h1 {
   color: #1e3c72;
   margin-bottom: 24px;
+  font-size: 2rem;
+  font-weight: 700;
 }
 
 .message {
-  background: #eef2ff;
-  padding: 12px;
-  border-radius: 8px;
+  background: linear-gradient(135deg, #eef2ff, #e0e7ff);
+  padding: 14px 20px;
+  border-radius: 12px;
   margin-bottom: 20px;
-  color: #166534;
+  color: #1e3c72;
+  border-left: 4px solid #2a5298;
+  font-weight: 500;
 }
 
 .message.error {
-  background: #fee2e2;
+  background: linear-gradient(135deg, #fee2e2, #fecaca);
   color: #dc2626;
+  border-left-color: #dc2626;
 }
 
 .form-card, .table-card {
   background: white;
-  padding: 24px;
-  border-radius: 16px;
-  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-  margin-bottom: 24px;
+  padding: 28px;
+  border-radius: 24px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+  margin-bottom: 28px;
+  transition: box-shadow 0.3s;
+}
+
+.form-card:hover, .table-card:hover {
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.12);
 }
 
 .form-card h2, .table-card h2 {
   color: #1e3c72;
   margin-bottom: 20px;
+  font-size: 1.4rem;
+  font-weight: 600;
 }
 
 .form-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 12px;
-  margin-bottom: 20px;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 16px;
+  margin-bottom: 24px;
 }
 
 input, select {
-  padding: 10px;
-  border: 1px solid #cbd5e1;
-  border-radius: 8px;
+  padding: 12px 16px;
+  border: 2px solid #e2e8f0;
+  border-radius: 12px;
   font-size: 14px;
+  transition: all 0.3s;
+  background: white;
 }
 
 input:focus, select:focus {
   outline: none;
   border-color: #2a5298;
+  box-shadow: 0 0 0 3px rgba(42, 82, 152, 0.1);
 }
 
 .button-group {
@@ -61,49 +87,60 @@ input:focus, select:focus {
 }
 
 .btn-primary {
-  background: #2a5298;
+  background: linear-gradient(135deg, #2a5298, #1e3c72);
   color: white;
-  padding: 10px 20px;
+  padding: 12px 28px;
   border: none;
-  border-radius: 8px;
+  border-radius: 40px;
   cursor: pointer;
+  font-weight: 600;
+  transition: all 0.3s;
 }
 
 .btn-primary:hover {
-  background: #1e3c72;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(42, 82, 152, 0.3);
 }
 
 .btn-secondary {
   background: #94a3b8;
   color: white;
-  padding: 10px 20px;
+  padding: 12px 28px;
   border: none;
-  border-radius: 8px;
+  border-radius: 40px;
   cursor: pointer;
+  font-weight: 600;
+  transition: all 0.3s;
 }
 
 .btn-secondary:hover {
   background: #64748b;
+  transform: translateY(-2px);
 }
 
 .table-responsive {
   overflow-x: auto;
+  border-radius: 16px;
 }
 
 table {
   width: 100%;
   border-collapse: collapse;
+  font-size: 14px;
 }
 
 th, td {
-  padding: 12px;
+  padding: 14px 12px;
   text-align: left;
   border-bottom: 1px solid #e2e8f0;
 }
 
 th {
-  background: #f1f5f9;
+  background: linear-gradient(135deg, #f1f5f9, #eef2ff);
   font-weight: 600;
+  color: #1e3c72;
+  position: sticky;
+  top: 0;
 }
 
 tr:hover {
@@ -111,51 +148,57 @@ tr:hover {
 }
 
 .btn-edit, .btn-delete {
-  padding: 6px 12px;
+  padding: 6px 14px;
   margin: 0 4px;
   border: none;
-  border-radius: 6px;
+  border-radius: 20px;
   cursor: pointer;
   font-size: 12px;
+  font-weight: 500;
+  transition: all 0.2s;
 }
 
 .btn-edit {
-  background: #f59e0b;
+  background: linear-gradient(135deg, #f59e0b, #d97706);
   color: white;
 }
 
 .btn-edit:hover {
-  background: #d97706;
+  transform: scale(1.05);
 }
 
 .btn-delete {
-  background: #dc2626;
+  background: linear-gradient(135deg, #dc2626, #b91c1c);
   color: white;
 }
 
 .btn-delete:hover {
-  background: #b91c1c;
+  transform: scale(1.05);
 }
 
 .low-stock {
   color: #eab308;
-  font-weight: 500;
+  font-weight: 600;
 }
 
 .out-stock {
   color: #dc2626;
-  font-weight: 500;
+  font-weight: 600;
 }
 
 .popular-yes {
-  background: #fef3c7;
+  background: linear-gradient(135deg, #fef3c7, #fde68a);
   font-weight: 600;
+  border-radius: 20px;
+  display: inline-block;
+  padding: 4px 12px;
 }
 
 .empty-message {
   text-align: center;
   color: #94a3b8;
-  padding: 40px;
+  padding: 48px;
+  font-size: 16px;
 }
 
 @media (max-width: 768px) {
@@ -164,7 +207,11 @@ tr:hover {
   }
   
   th, td {
-    padding: 8px;
+    padding: 10px 8px;
     font-size: 12px;
+  }
+  
+  .form-card, .table-card {
+    padding: 20px;
   }
 }
